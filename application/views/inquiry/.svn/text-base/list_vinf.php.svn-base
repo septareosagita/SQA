@@ -1,0 +1,196 @@
+<script type="text/javascript">
+    $(function() {
+        $(".report_preview").fancybox({
+            'width'         : '75%',
+            'height'        : '75%',
+            'autoScale'     : false,
+            'transitionIn'  : 'elastic',
+            'transitionOut' : 'elastic',
+            'type'          : 'iframe'
+        });
+    });
+
+    // fungsi untuk merubah status SHOW FLAG
+    function switch_status_flag(problem_id,show_flag) {
+        
+        $.post(
+        '<?= site_url('inquiry/switch_status_flag') ?>',
+        {
+            problem_id: problem_id,
+            show_flag : show_flag
+        },
+        function(html){
+            $('#list_vinf').html(html);         
+        })
+    }
+
+    //fungsi untuk mengambil problem_id dan variabel lainnya dari checkbox 
+    function on_check(problem_id,show_flag,approve_pdate,reg_in,check_pdate,sqpr_num) {
+
+        // if kondisi sperti ini maka tombol checked akan menjadi Unchecked
+        // atau
+        // tombol akan otomatis berupa Unchecked jika SQA status berwarna biru/sudah di checked
+        if(reg_in !='' && check_pdate !='' && approve_pdate ==''){
+            $('#btnUncek').removeAttr('disabled');
+            $('#btnUncek').show();
+            $('#btncek').hide();
+        }
+        
+       // tombol akan otomatis berupa Checked jika SQA status berwarna abu-abu/belum di checked
+        else {
+            $('#btncek').removeAttr('disabled');
+            $('#btncek').show();
+            $('#btnUncek').hide();
+        }
+
+        // if kondisi sperti ini maka tombol Approved akan menjadi UnAprroved
+        // atau
+        // tombol akan otomatis berupa UnAprroved jika SQA status berwarna hijau/sudah di Approved
+         if(approve_pdate !=''){
+            $('#btnUnapproved').removeAttr('disabled');
+            $('#btnUnapproved').show();
+            $('#btnapproved').hide();
+        }
+
+       // tombol akan otomatis berupa Approved jika SQA status berwarna biru/belum di Approved
+        else {
+            $('#btnapproved').removeAttr('disabled');
+            $('#btnapproved').show();
+            $('#btnUnapproved').hide();
+        }
+
+         // if kondisi sqpr_num tidak sama dengan kosong maka tombol SET SQPR akan menjadi SET SQPR CANCEL
+        if(sqpr_num !=''){
+            $('#btnSQPRcanc').removeAttr('disabled');
+            $('#btnSQPRcanc').show();
+            $('#btnSQPR').hide();          
+        }
+
+         // tombol SET SQPR jika sqpr_num belum terisi
+        else {
+            $('#btnSQPR').removeAttr('disabled');
+            $('#btnSQPR').show();
+            $('#btnSQPRcanc').hide();
+            
+        }
+
+        $('input[name=check]').removeAttr('checked');
+        $('#dfct_' + problem_id).attr('checked', 'checked');
+
+        // mengirim variabel dari checkbox ke fungsi lainnya
+        $('#problem_id').val(problem_id);
+        $('#show_flag').val(show_flag);
+        $('#approve_pdate').val(approve_pdate);
+        $('#check_pdate').val(check_pdate);
+        $('#sqpr_num').val(sqpr_num);
+
+    }
+
+    // fungsi untuk merubah show status yang akan ditampilkan pada monitor
+    function show_flag() {
+        var problem_id = $('#problem_id').val();
+        var show_flag = $('#show_flag').val();
+        var approve_pdate = $('#approve_pdate').val();
+
+        // jika approve_pdate tidak sama dengan null/terisi maka show_flag akan berubah
+        // atau
+        // show_flag bisa muncul kalo SQA status sudah di Approve jika belum di Approve dia tidak bisa muncul.
+        if(approve_pdate !='') {
+            switch_status_flag(problem_id,show_flag)
+        }
+        // tetapi jika approve_pdate sama dengan null/kosong akan muncul alert
+        else {
+            alert('! defect status must be approve First');
+        }
+    }
+
+</script>
+
+<input type="hidden" value="" id="problem_id" name="problem_id" />
+<input type="hidden" value="" id="show_flag" name="show_flag" />
+<input type="hidden" value="" id="approve_pdate" name="approve_pdate" />
+<input type="hidden" value="" id="check_pdate" name="check_pdate" />
+<input type="hidden" value="" id="sqpr_num" name="sqpr_num" />
+<table class="data" width="100%">
+    <tr align="center" style="background:#dadada; -moz-border-radius:4px 4px 4px 4px;">
+        <th rowspan="3" align="center">No</th>
+        <th rowspan="3"></th>
+        <th colspan="4" align="center"><div align="center">Status P/S</div></th>
+        <th rowspan="3">Responsible</th>
+        <th rowspan="3">Date</th>
+        <th rowspan="3">Shift</th>
+        <th rowspan="3">Model</th>
+        <th rowspan="3">Frame No</th>
+        <th rowspan="3">Body No</th>
+        <th rowspan="3">Color</th>
+        <th rowspan="3">Defect</th>
+        <th rowspan="3">Rank</th>
+        <th rowspan="3">Category</th>
+        <th rowspan="3">Auditor1</th>
+        <th rowspan="3">Auditor2</th>
+        <th rowspan="3">Status SQA</th>
+        <th rowspan="3">Status Show</th>
+    </tr>
+    <tr style="background:#dadada;">
+        <th align="center" colspan="2"><div align="center">Out Flow</div></th><th align="center" colspan="2"><div align="center">Problem</div></th>
+    </tr>
+    <tr style="background:#dadada;">
+        <th><div align="center">Temp</div></th><th><div align="center">Fix</div></th><th><div align="center">Temp</div></th><th><div align="center">Fix</div></th>
+    </tr>
+    <?php
+    if ($list_v_sqa_dfct): $i = 1;
+        foreach ($list_v_sqa_dfct as $l):
+
+            $c = ($i % 2 == 0) ? "class=\"row-a\"" : "class=\"row-b\"";
+            if (mssql_guid_string($l->PROBLEM_ID) == '$problem_id') {
+                $c = "class=\"active\"";
+            }
+    ?>
+            <tr <?= $c ?>>
+                <td align="center"><?= $i; ?>.</td>
+                <td><input type="checkbox" name="check"  id="dfct_<?= mssql_guid_string($l->PROBLEM_ID) ?>" value="<?= mssql_guid_string($l->PROBLEM_ID) ?>"
+                    onclick="on_check('<?= mssql_guid_string($l->PROBLEM_ID) ?>',
+                    '<?= ($l->SHOW_FLG == '0') ? 1 : 0 ?>',
+                    '<?= $l->APPROVE_PDATE ?>',
+                    '<?= $l->REG_IN ?>',
+                    '<?= $l->CHECK_PDATE ?>',
+                    '<?= $l->SQPR_NUM ?>');"
+                    style="cursor: pointer"/>
+                </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><?= $l->SHOP_NM ?></td>
+        <td><?= $l->SQA_PDATE ?></td>
+        <td><?= $l->SQA_SHIFTGRPNM ?></td>
+        <td><?= $l->DESCRIPTION ?></td>
+        <td><a href="<?= site_url('preview_report' . $l->PROBLEM_ID) ?>" class="report_preview"><label style="color:red; cursor: pointer;"><?= $l->VINNO ?></label></a></td>
+        <td><?= $l->BODYNO ?></td>
+        <td><?= $l->EXTCLR ?></td>
+        <td><?= $l->DFCT ?></td>
+        <td><?= $l->RANK_NM ?></td>
+        <td><?= $l->CTG_GRP_NM ?></td>
+        <td><?= $l->AUDITOR_NM_1 ?></td>
+        <td><?= $l->AUDITOR_NM_2 ?></td>
+        <td>
+            <?= ($l->REG_IN != '' && $l->CHECK_PDATE == '') ? '<img src="http://localhost/toyota/assets/style/images/blum_diisi.png" />' : '' ?>
+            <?= ($l->REG_IN != '' && $l->CHECK_PDATE != '' && $l->APPROVE_PDATE == '') ? '<img src="http://localhost/toyota/assets/style/images/sudah_diisi.png" />' : '' ?>
+            <?= ($l->APPROVE_PDATE != '') ? '<img src="http://localhost/toyota/assets/style/images/approve.png" />' : '' ?>
+
+
+        </td>
+        <td><?= ($l->APPROVE_PDATE !='' && $l->SHOW_FLG == '1') ? '<img src="http://localhost/toyota/assets/style/images/flag.png" width="25" heigth="20"/>' : '' ?></td>
+    </tr>
+    <?php
+            $i++;
+        endforeach;
+    else:
+    ?>
+        <tr class="row-b">
+            <td colspan="20">Data Is Empty</td>
+        </tr>
+    <?php endif; ?>
+
+
+</table>

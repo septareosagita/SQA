@@ -1,0 +1,492 @@
+<script type="text/javascript">
+    $(function(){
+        $("#SQA_FROM_PDATE").datepicker({nextText: '&raquo;',prevText: '&laquo;',showAnim: 'slideDown',dateFormat: 'dd-mm-yy',changeMonth: true,changeYear: true});
+        $("#SQA_TO_PDATE").datepicker({nextText: '&raquo;',prevText: '&laquo;',showAnim: 'slideDown',dateFormat: 'dd-mm-yy',changeMonth: true,changeYear: true});
+        $("#ASSY_FROM_PDATE").datepicker({nextText: '&raquo;',prevText: '&laquo;',showAnim: 'slideDown',dateFormat: 'dd-mm-yy',changeMonth: true,changeYear: true});
+        $("#ASSY_TO_PDATE").datepicker({nextText: '&raquo;',prevText: '&laquo;',showAnim: 'slideDown',dateFormat: 'dd-mm-yy',changeMonth: true,changeYear: true});
+        $("#ASSY_PDATE").datepicker({nextText: '&raquo;',prevText: '&laquo;',showAnim: 'slideDown',dateFormat: 'dd-mm-yy',changeMonth: true,changeYear: true});
+        $("#INSP_FROM_PDATE").datepicker({nextText: '&raquo;',prevText: '&laquo;',showAnim: 'slideDown',dateFormat: 'dd-mm-yy',changeMonth: true,changeYear: true});
+        $("#INSP_TO_PDATE").datepicker({nextText: '&raquo;',prevText: '&laquo;',showAnim: 'slideDown',dateFormat: 'dd-mm-yy',changeMonth: true,changeYear: true});
+        $("#inspection_to").datepicker({nextText: '&raquo;',prevText: '&laquo;',showAnim: 'slideDown',dateFormat: 'dd-mm-yy',changeMonth: true,changeYear: true});
+    });
+
+    // fungsi untuk SQA SEARCH
+    function search() {
+        $("#list_vinf").ajaxStart(function(){
+            $(this).html("<img src='<?= base_url() ?>assets/style/images/loading-gif.gif' />");
+        });
+
+        var from = $('#SQA_FROM_PDATE').val();
+        var to = $('#SQA_TO_PDATE').val();
+        var sqa_shiftgrpnm = $('#SQA_SHIFTGRPNM').val();
+        var plant_nm = $('#PLANT_NM').val();
+
+        param =  from + ';;' + to + ';;' + sqa_shiftgrpnm + ';;' + plant_nm ;
+        get_dfct(param);
+    }
+
+    // fungsi untuk ADVANCE SEARCH
+    function advancesearch() {
+    $("#list_vinf").ajaxStart(function(){
+            $(this).html("<img src='<?= base_url() ?>assets/style/images/loading-gif.gif' />");
+        });
+        var ASSY_FROM_PDATE = $('#ASSY_FROM_PDATE').val();
+        var ASSY_TO_PDATE = $('#ASSY_TO_PDATE').val();
+        var ASSY_SHIFTGRPNM = $('#ASSY_SHIFTGRPNM').val();
+        var INSP_FROM_PDATE = $('#INSP_FROM_PDATE').val();
+        var INSP_TO_PDATE = $('#INSP_TO_PDATE').val();
+        var INSP_SHIFTGRPNM = $('#INSP_SHIFTGRPNM').val();
+        var DESCRIPTION = $('#DESCRIPTION').val();
+        var KATASHIKI = $('#KATASHIKI').val();
+        var EXTCLR = $('#EXTCLR').val();
+        var VINNO = $('#VINNO').val();
+        var BODYNO = $('#BODYNO').val();
+        var DFCT = $('#DFCT').val();
+        var RANK_NM = $('#RANK_NM').val();
+        var CTG_GRP_NM = $('#CTG_GRP_NM').val();
+        var CTG_NM = $('#CTG_NM').val();
+        var INSP_ITEM_FLG = $('#INSP_ITEM_FLG').val();
+        var QLTY_GT_ITEM = $('#QLTY_GT_ITEM').val();
+        var REPAIR_FLG = $('#REPAIR_FLG').val();
+        var SHOW_FLG = $('#SHOW_FLG').val();
+        var Status_Problem_Sheet = $('#Status_Problem_Sheet').val();
+        if ($('#Problem_Sheet_a').val()==''){
+            var Problem_Sheet = '';
+        }
+        if ($('#Problem_Sheet_b').val()==''){
+            var Problem_Sheet = '';
+        }
+        if ($('#Problem_Sheet_c').val()==''){
+            var Problem_Sheet = '';
+        }
+        if ($('#Problem_Sheet_d').val()==''){
+            var Problem_Sheet = '';
+        }
+        else{
+            var Problem_Sheet = $('#Problem_Sheet_a').val()+"/"+$('#Problem_Sheet_b').val()+"/SQA-QAD/"+$('#Problem_Sheet_c').val()+"/"+$('#Problem_Sheet_d').val();
+        }
+       
+        
+        param = ASSY_FROM_PDATE + ';;' + ASSY_TO_PDATE + ';;' + ASSY_SHIFTGRPNM
+            + ';;' + INSP_FROM_PDATE + ';;' + INSP_TO_PDATE + ';;' + INSP_SHIFTGRPNM
+            + ';;' + DESCRIPTION  + ';;' + KATASHIKI + ';;' + EXTCLR + ';;' + VINNO + ';;' + BODYNO
+            + ';;' + DFCT + ';;' + RANK_NM + ';;' + CTG_GRP_NM + ';;' + CTG_NM + ';;' + INSP_ITEM_FLG
+            + ';;' + QLTY_GT_ITEM  + ';;' + REPAIR_FLG + ';;' + SHOW_FLG + ';;' + Problem_Sheet + ';;' + Status_Problem_Sheet  ;
+        get_dfct_advance(param);
+    }
+
+
+    function get_dfct(param) {
+        $("#list_vinf").ajaxStart(function(){
+            $(this).html("<img src='<?= base_url() ?>assets/style/images/loading-gif.gif' />");
+        });
+
+        $.post('<?= site_url('inquiry/get_dfct') ?>',
+        {
+            param: param
+        },
+        function(html){
+            $('#list_vinf').html(html);
+        })
+    }
+
+    function get_dfct_advance(param) {
+        $.post('<?= site_url('inquiry/get_dfct_advance') ?>',
+        {
+            param: param
+        },
+        function(html){
+            $('#list_vinf').html(html);
+        })
+    }
+
+    // fungsi untuk vehicle status ALL
+    function status_vehicle_all(){
+
+        $('#DFCT').attr('disabled',true).css({'background':' url("<?= base_url() ?>assets/images/bg_ip.png") repeat-x'});
+        $('#RANK_NM').attr('disabled',true).css({'background':' url("<?= base_url() ?>assets/images/bg_ip.png") repeat-x'});
+        $('#CTG_GRP_NM').attr('disabled',true).css({'background':' url("<?= base_url() ?>assets/images/bg_ip.png") repeat-x'});
+        $('#CTG_NM').attr('disabled',true).css({'background':' url("<?= base_url() ?>assets/images/bg_ip.png") repeat-x'});
+        $.post('<?= site_url('inquiry/status_vehicle_all') ?>',
+        function(html){
+            $('#list_vinf').html(html);
+        })
+    }
+
+    // fungsi untuk vehicle status PROBLEM SHEET
+    function status_vehicle_probsheet(){
+        $('#DFCT').attr('disabled',false).removeAttr('style').css({'width':'430px'});
+        $('#RANK_NM').attr('disabled',false).css({'background':' #ffffff url("<?= base_url() ?>assets/style/images/bg_ip.png") repeat-x'});
+        $('#CTG_GRP_NM').attr('disabled',false).css({'background':' #ffffff url("<?= base_url() ?>assets/style/images/bg_ip.png") repeat-x'});
+        $('#CTG_NM').attr('disabled',false).css({'background':' #ffffff url("<?= base_url() ?>assets/style/images/bg_ip.png") repeat-x'});
+        $.post('<?= site_url('inquiry/status_vehicle_probsheet') ?>',
+        function(html){
+            $('#list_vinf').html(html);
+        })
+    }
+
+    // fungsi untuk vehicle status SQPR
+    function status_vehicle_sqpr(){
+        $('#DFCT').attr('disabled',false).removeAttr('style').css({'width':'430px'});
+        $('#RANK_NM').attr('disabled',false).css({'background':' #ffffff url("<?= base_url() ?>assets/style/images/bg_ip.png") repeat-x'});
+        $('#CTG_GRP_NM').attr('disabled',false).css({'background':' #ffffff url("<?= base_url() ?>assets/style/images/bg_ip.png") repeat-x'});
+        $('#CTG_NM').attr('disabled',false).css({'background':' #ffffff url("<?= base_url() ?>assets/style/images/bg_ip.png") repeat-x'});
+        $.post('<?= site_url('inquiry/status_vehicle_sqpr') ?>',
+        function(html){
+            $('#list_vinf').html(html);
+        })
+    }
+
+    // fungsi untuk vehicle status NO DEFECT
+    function status_vehicle_nodfct(){
+
+        $('#DFCT').attr('disabled',true).css({'background':' url("<?= base_url() ?>assets/images/bg_ip.png") repeat-x'});
+        $('#RANK_NM').attr('disabled',true).css({'background':' url("<?= base_url() ?>assets/images/bg_ip.png") repeat-x'});
+        $('#CTG_GRP_NM').attr('disabled',true).css({'background':' url("<?= base_url() ?>assets/images/bg_ip.png") repeat-x'});
+        $('#CTG_NM').attr('disabled',true).css({'background':' url("<?= base_url() ?>assets/images/bg_ip.png") repeat-x'});
+        $.post('<?= site_url('inquiry/status_vehicle_nodfct') ?>',
+        function(html){
+            $('#list_vinf').html(html);
+        })
+    }
+
+    // fungsi untuk vehicle status NO DEFECT
+    function status_ProbSheet_Reply(){
+
+        $.post('<?= site_url('inquiry/status_ProbSheet_Reply') ?>',
+        function(html){
+            $('#list_vinf').html(html);
+        })
+    }
+
+    // fungsi untuk CHECKED status SQA
+    function cek(){
+        var problem_id = $('#problem_id').val();
+        $.post(
+        '<?= site_url('inquiry/cek') ?>',
+        {
+            problem_id: problem_id
+        },
+        function(html){
+            $('#list_vinf').html(html);
+            $('#btnUncek').removeAttr('disabled');
+            $('#btnUncek').show();
+            $('#btncek').hide();
+        })
+      
+    }
+
+    // fungsi untuk UNCHECKED status SQA
+    function UnCek(){
+        var problem_id = $('#problem_id').val();
+        $.post(
+        '<?= site_url('inquiry/Uncek') ?>',
+        {
+            problem_id: problem_id
+        },
+        function(html){
+            $('#list_vinf').html(html);
+            $('#btnUncek').attr('disabled', 'disabled');
+            $('#btncek').show();
+            $('#btnUncek').hide();
+        })
+    }
+
+    // fungsi untuk APPROVED status SQA
+    function approved(){
+        var problem_id = $('#problem_id').val();
+        var check_pdate = $('#check_pdate').val();
+
+        if(check_pdate !='') {
+            $.post(
+            '<?= site_url('inquiry/approved') ?>',
+            {
+                problem_id: problem_id
+            },
+            function(html){
+                $('#list_vinf').html(html);
+                $('#btnUnapproved').removeAttr('disabled');
+                $('#btnUnapproved').show();
+                $('#btnapproved').hide();
+            })
+        }
+        else {
+            alert('! defect status must be check First');
+        }
+    }
+
+    // fungsi untuk UNAPPROVED status SQA
+    function Unapproved(){
+        var problem_id = $('#problem_id').val();
+        $.post(
+        '<?= site_url('inquiry/Unapproved') ?>',
+        {
+            problem_id: problem_id
+        },
+        function(html){
+            $('#list_vinf').html(html);
+            $('#btnUnapproved').attr('disabled', 'disabled');
+            $('#btnapproved').show();
+            $('#btnUnapproved').hide();
+        })
+    }
+
+    function setSQPR(){
+        var problem_id = $('#problem_id').val();
+        $.post(
+        '<?= site_url('inquiry/setSQPR') ?>',
+        {
+            problem_id: problem_id
+        },
+        function(html){
+            $('#list_vinf').html(html);
+            $('#btnSQPRcanc').attr('disabled', 'disabled');
+            $('#btnSQPRcanc').show();
+            $('#btnSQPR').hide();
+        })
+    }
+
+     function SQPRcanc(){
+        var problem_id = $('#problem_id').val();
+        $.post(
+        '<?= site_url('inquiry/SQPRcanc') ?>',
+        {
+            problem_id: problem_id
+        },
+        function(html){
+            $('#list_vinf').html(html);
+            $('#btnSQPRcanc').attr('disabled', 'disabled');
+            $('#btnSQPR').show();
+            $('#btnSQPRcanc').hide();
+        })
+    }
+
+</script>
+<div class="columns">
+    <div class="column grid_8 first" width="100%">
+        <div class="widgetform">
+            <header>
+                <h2>SQA</h2>
+            </header>
+            <section>
+                <form name="fInput" method="post" action="" id="fInput">
+
+                    <div class="defectleft">
+                        <div class="formreg">
+                            <div style="width:80px; float:left;"><label>From</label></div>
+                            <b>:</b> &nbsp;<input id="SQA_FROM_PDATE" name="SQA_FROM_PDATE" value="<?= get_date2() ?>" type="text" style="width:145px; ">
+                            <br><p/><p/>
+
+                            <div style="width:80px; float:left;"><label>To</label></div>
+                            <b>:</b> &nbsp;<input id="SQA_TO_PDATE" name="SQA_TO_PDATE" value="<?= get_date2() ?>"type="text" style="width:145px; ">
+                        </div>
+                        <div class="formreg3">
+                            <div style="width:70px; float:left;"><label>Shift</label></div>
+                            <b>:</b> &nbsp;<select name="SQA_SHIFTGRPNM" id="SQA_SHIFTGRPNM" style="width:200px; ">
+
+                                <?php if (count($list_shift)): foreach ($list_shift as $l): ?>
+                                        <option value="<?= $l->SHIFTTGRP_NM ?>"><?= $l->SHIFTTGRP_NM ?></option>
+                                <?php endforeach;
+                                    endif; ?>
+                                </select><br />
+                                <p></p>
+
+                                <div style="width:70px; float:left; "><label>Plant</label></div>
+                                <b>:</b> &nbsp;<select name="PLANT_NM" id="PLANT_NM" style="width:200px; ">
+
+                                <?php if (count($list_plant)): foreach ($list_plant as $l): ?>
+                                            <option value="<?= $l->PLANT_NM ?>"><?= $l->PLANT_NM ?></option>
+                                <?php endforeach;
+                                        endif; ?>
+                                    </select><br /><br>
+                                </div>
+                            </div>
+                            <div class="buttonreg" align="center">
+                                <button class="button button-gray" type="button" onclick='search()'>Search</button>
+                                <button class="button button-gray" type="button" onclick="window.location='<?= site_url('t_sqa_dfct/change') ?>'">Register</button>
+                                <button class="button button-gray" type="button" onclick='simpan()'>Download Rep</button>
+                            </div>
+                    </section></div>
+
+                <div class="widgetform">
+                    <header>
+                        <h2>
+                            <div class="title2" id="title2" onclick="$('#advance_search').toggle('slow')">ADVANCE SEARCH</div>
+                        </h2></header>
+                    <div id="advance_search" style="display:none;">
+                        <section>
+                            <!--start middlecontent -->
+                            <div id="middlecontent">
+                                <div id="submiddle">
+                                    <div class="title">Production Date</div><p>
+                                    <div style="width:45px; float:left;"><label>From</label></div>
+                                    <b>:</b> &nbsp;<input id="ASSY_FROM_PDATE" name="ASSY_FROM_PDATE" type="text"  style="width:110px; "/><br /><p></p>
+                                    <div style="width:45px; float:left;"><label>To</label></div>
+                                    <b>:</b> &nbsp;<input id="ASSY_TO_PDATE" name="ASSY_TO_PDATE" type="text"  style="width:110px; "/><br /><p></p>
+                                    <div style="width:45px; float:left;"><label>Shift:</label></div>
+                                    <b>:</b> &nbsp;<select name="ASSY_SHIFTGRPNM" id="ASSY_SHIFTGRPNM" style="width:120px; ">
+                                        <option value="0">---select---</option>
+                                <?php if (count($list_m_sqa_shiftgrp)): foreach ($list_m_sqa_shiftgrp as $l): ?>
+                                                <option value="<?= $l->SHIFTTGRP_NM ?>"><?= $l->SHIFTTGRP_NM ?></option>
+                                <?php endforeach;
+                                            endif; ?>
+                                        </select><br /><p></p>
+                                    </div>
+
+                                    <div id="submiddle">
+                                        <div class="title">Inspection Date</div><p>
+                                        <div style="width:45px; float:left;"><label>From</label></div>
+                                        <b>:</b> &nbsp;<input id="INSP_FROM_PDATE" name="INSP_FROM_PDATE"  type="text" style="width:110px;"/><br /><p></p>
+                                        <div style="width:45px; float:left;"><label>To</label></div>
+                                        <b>:</b> &nbsp;<input id="INSP_TO_PDATE" name="INSP_TO_PDATE" type="text" style="width:110px; "/><br /><p></p>
+                                        <div style="width:45px; float:left;"><label>Shift:</label></div>
+                                        <b>:</b> &nbsp;<select name="INSP_SHIFTGRPNM" id="INSP_SHIFTGRPNM" style="width:120px; ">
+                                            <option value="0">---select---</option>
+                                <?php if (count($list_m_sqa_shiftgrp)): foreach ($list_m_sqa_shiftgrp as $l): ?>
+                                                    <option value="<?= $l->SHIFTTGRP_NM ?>"><?= $l->SHIFTTGRP_NM ?></option>
+                                <?php endforeach;
+                                                endif; ?>
+                                            </select><br /><p></p>
+                                        </div>
+
+                                        <div id="submiddle">
+                                            <div class="title">Vehicle Data</div><p>
+                                            <div style="width:50px; float:left;"><label>Model Name</label></div>
+                                            <b>:</b> &nbsp;<input id="DESCRIPTION" name="DESCRIPTION" type="text" style="width:110px; "/><br /><p></p>
+                                            <div style="width:50px; float:left;"><label>Model Code</label></div>
+                                            <b>:</b> &nbsp;<input id="KATASHIKI" name="KATASHIKI" type="text" style="width:110px; "/><br /><p></p>
+                                            <div style="width:50px; float:left;"><label>Color</label></div>
+                                            <b>:</b> &nbsp;<input id="EXTCLR" name="EXTCLR" type="text" style="width:110px; "/><br /><p></p>
+                                        </div>
+
+                                        <div id="submiddle">
+                                            <div style="margin-top:30px;"></div><p><p>
+                                            <div style="width:65px; float:left;"><label>Frame No</label></div>
+                                            <b>:</b> &nbsp;<input id="VINNO" name="VINNO" type="text" style="width:110px; height:15px;"/><br /><p></p>
+                                            <div style="width:65px; float:left;"><label>Body No</label></div>
+                                            <b>:</b> &nbsp;<input id="BODYNO" name="BODYNO" type="text" style="width:110px; height:15px;"/><br /><p></p>
+                                        </div>
+
+                                        <div class="title">Defect Data</div><hr/>
+                                        <div id="defectdataleft">
+                                            <div style="position:relative; top:-15px;">
+                                                <label>Status Vehicle</label>
+                                                &nbsp; <b>:</b> &nbsp;
+                                                <input type="radio" name="Status Vehicle" value="All" id="stat_all" onClick="status_vehicle_all();" checked="checked" style="margin:5px;"/>
+                                                <label>All</label>
+                                                <input type="radio" name="Status Vehicle" value="Problem Sheet" id="stat_prob" onClick="status_vehicle_probsheet();" style="margin:5px;"/>
+                                                <label>Problem Sheet</label>
+                                                <input type="radio" name="Status Vehicle" value="SQPR" id="stat_sqpr" onClick="status_vehicle_sqpr();" style="margin:5px;"/>
+                                                <label>SQPR</label>
+                                                <input type="radio" name="Status Vehicle" value="No Defect" id="stat_nodfct" onClick="status_vehicle_nodfct();" style="margin:5px;"/>
+                                                <label>No Defect</label>
+                                            </div>
+                                            <div style="width:65px; float:left;"><label>Defect</label></div>
+                                            <b>:</b> &nbsp;<input type="text" id="DFCT" name="DFCT" style="width:430px; height:15px;"/><br /><p></p>
+                                            <div ><label style="width:65px; float:left;">Rank</label></div>
+                                            <b>:</b> &nbsp;<select name="RANK_NM" id="RANK_NM" style="width:160px; height:26px;">
+                                                <option value="0">---select---</option>
+                                <?php foreach ($list_rank_model as $r): ?>
+                                                    <option><?= $r->RANK_NM ?></option>
+                                <?php endforeach ?>
+                                                </select>
+                                                <label class="labeltop" style="margin-left:12px; margin-right:12px;">Category Group</label>
+
+                                                <b>:</b> &nbsp;<select name="CTG_GRP_NM" id="CTG_GRP_NM" style="width:200px; height:26px;">
+                                                    <option value="0">---select---</option>
+                                <?php foreach ($list_sqa_ctg_grp_model as $r): ?>
+                                                        <option><?= $r->CTG_GRP_NM ?></option>
+                                <?php endforeach ?>
+                                                    </select><br /><p></p>
+                                                    <label class="labeltop" style="margin-left:250px; margin-right:13px;">Category Name</label>
+
+                                                    <b>:</b> &nbsp;<select name="CTG_NM" id="CTG_NM" style="width:200px; height:26px;">
+                                                        <option value="0">---select---</option>
+                                <?php foreach ($list_sqa_ctg_model as $r): ?>
+                                                            <option><?= $r->CTG_NM ?></option>
+                                <?php endforeach ?>
+                                                        </select><br/><hr>
+                                                    </div>
+
+                                                    <div id="defectdataright">
+                                                        <div><label class="defecttitle" style="margin-left:120px;">All&nbsp; Yes&nbsp; No</label></div>
+                                                        <div style="width:120px; float:left;"><label>Inspection Item</label></div>
+                                                        <input type="hidden" name="INSP_ITEM_FLG" id="INSP_ITEM_FLG" value="" />
+                                                        <input type="radio" name="INSP_ITEM_FLG_r" id="INSP_ITEM_FLG_2" value="All" onclick="$('#INSP_ITEM_FLG').val('')" checked="checked" >&nbsp;&nbsp;
+                                                        <input type="radio" name="INSP_ITEM_FLG_r" id="INSP_ITEM_FLG_1" value="Yes" onclick="$('#INSP_ITEM_FLG').val(1)" >&nbsp;&nbsp;
+                                                        <input type="radio" name="INSP_ITEM_FLG_r" id="INSP_ITEM_FLG_0" value="No" onclick="$('#INSP_ITEM_FLG').val(0)" ><br /><p></p>
+                                                        <div style="width:120px; float:left;"><label>Quality Gate Item</label></div>
+                                                        <input type="hidden" name="QLTY_GT_ITEM" id="QLTY_GT_ITEM" value="" />
+                                                        <input type="radio" name="QLTY_GT_ITEM_r" id="QLTY_GT_ITEM_2" value="All" onclick="$('#QLTY_GT_ITEM').val('')" checked="checked" >&nbsp;&nbsp;
+                                                        <input type="radio" name="QLTY_GT_ITEM_r" id="QLTY_GT_ITEM_1" value="Yes" onclick="$('#QLTY_GT_ITEM').val(1)" >&nbsp;&nbsp;
+                                                        <input type="radio" name="QLTY_GT_ITEM_r" id="QLTY_GT_ITEM_0" value="No" onclick="$('#QLTY_GT_ITEM').val(0)" ><br /><p></p>
+                                                        <div style="width:120px; float:left;"><label>History Repair Proses</label></div>
+                                                        <input type="hidden" name="REPAIR_FLG" id="REPAIR_FLG" value="" />
+                                                        <input type="radio" name="REPAIR_FLG_r" id="REPAIR_FLG_2" value="All" onclick="$('#REPAIR_FLG').val('')" checked="checked" >&nbsp;&nbsp;
+                                                        <input type="radio" name="REPAIR_FLG_r" id="REPAIR_FLG_1" value="Yes" onclick="$('#REPAIR_FLG').val(1)" >&nbsp;&nbsp;
+                                                        <input type="radio" name="REPAIR_FLG_r" id="REPAIR_FLG_0" value="No" onclick="$('#REPAIR_FLG').val(0)" ><br /><p></p><br /><p></p>
+                                                    </div>
+                                                    <div style="clear:both;"></div>
+                                                    <label class="title" style="margin-bottom: 50px;">Problem Sheet</label>
+                                                    <input type="hidden" name="Problem_Sheet" id="Problem_Sheet" value="" />
+                                                    <label class="title" style="margin-left:250px; margin-bottom: 50px;">Status Problem Sheet</label>
+                                                    <input type="hidden" name="Status_Problem_Sheet" id="Status_Problem_Sheet" value="" />
+                                                    <label class="title" style="margin-left:135px; margin-bottom: 50px;">Show Status</label>
+                                                    <input type="hidden" name="SHOW_FLG" id="SHOW_FLG" value="" />
+                                                    <br/><br/>
+                                                    <div id="subproblem">
+                                                        <input type="text" name="Problem_Sheet" id="Problem_Sheet_a" style="width:40px; height:10px;" maxlength="3" />
+                                                        / <input type="text" name="Problem_Sheet" id="Problem_Sheet_b" style="width:40px; height:10px;" maxlength="4" />
+                                                        / SQA-QAD
+                                                        / <input type="text" name="Problem_Sheet" id="Problem_Sheet_c" style="width:50px; height:10px;" maxlength="2" />
+                                                        / <input type="text" name="Problem_Sheet" id="Problem_Sheet_d" style="width:50px; height:10px;" maxlength="4" />
+
+                                                        <input type="radio" name="Status_Problem_Sheet" id="Status_Problem_Sheet_4" value="All" onclick="$('#Status_Problem_Sheet').val('')" checked="checked" style="margin-left:30px; margin-right: 5px;" />All
+                                                        <input type="radio" name="Status_Problem_Sheet" id="Status_Problem_Sheet_3" value="Open" onclick="$('#Status_Problem_Sheet').val('0')" style="margin-left:5px; margin-right: 5px;"  />Open
+                                                        <input type="radio" name="Status_Problem_Sheet" id="Status_Problem_Sheet_2" value="Closed" onclick="$('#Status_Problem_Sheet').val('1')" style="margin-left:5px; margin-right: 5px;"  />Closed
+                                                        <input type="radio" name="Status_Problem_Sheet" id="Status_Problem_Sheet_1"value="Replay" onclick="status_ProbSheet_Reply()" style="margin-left:5px; margin-right: 5px;" />Replay
+                                                        <input type="radio" name="Status_Problem_Sheet" id="Status_Problem_Sheet_0" value="Delay" style="margin-left:5px; margin-right: 5px;"  />Delay
+
+                                                        <input type="radio" name="SHOW_FLG_r" id="SHOW_FLG_2" value="All" onclick="$('#SHOW_FLG').val('')" checked="checked" style="margin-left:30px; margin-right: 5px;" />All
+                                                        <input type="radio" name="SHOW_FLG_r" id="SHOW_FLG_1" value="Yes" onclick="$('#SHOW_FLG').val(1)" style="margin-left:5px; margin-right: 5px;" />Yes
+                                                        <input type="radio" name="SHOW_FLG_r" id="SHOW_FLG_0" value="No" onclick="$('#SHOW_FLG').val(0)" style="margin-left:5px; margin-right: 5px;" />No
+
+                                                    </div><hr/>
+                                                    <button class="button button-gray" type="button" onclick='advancesearch()'>Advance Search</button>
+                                                    <div id="reportbtn2">
+                                                        <input type="button" name="btnapproved" id="btnapproved" value="Approved" class="button button-gray" style="width:100px;" onclick="approved();">
+                                                        <input type="button" name="btnUnapproved" id="btnUnapproved" value="Unapproved" class="button button-gray" style="width:100px;display: none" onclick="Unapproved();">
+                                                        <button class="button button-gray" type="button" onclick='show_flag()'>Show</button>
+                                                        <button class="button button-gray" type="button">P/S Closed</button>
+                                                        <input type="button" name="Checked" id="btncek" value="Checked" class="button button-gray" style="width:100px;" onclick="cek();">
+                                                        <input type="button" name="UnChecked" id="btnUncek" value="UnChecked" class="button button-gray" style="width:100px;display: none" onclick="UnCek();">                                                       
+                                                        <input type="button" name="btnSQPR" id="btnSQPR" value="Set SQPR" class="button button-gray" style="width:100px;" onclick="setSQPR();">
+                                                        <input type="button" name="btnSQPRcanc" id="btnSQPRcanc" value="Set SQPR Cancel" class="button button-gray" style="width:100px;display: none" onclick="SQPRcanc();">
+                                                        <button class="button button-gray" id="reply" type="button">Reply</button>
+
+                                                    </div></div>
+                                                <!--finish middlecontent -->
+
+
+
+                                            </section></div> </div></div>
+                                <div class="widgetentri">
+                                    <section>
+                                        <div id="list_vinf" align="center" style="margin-top:5px;">
+
+                                        </div>
+                                        <div id="buttonreg" align="right" style="margin-top:10px;">
+                                            <button class="button button-gray" type="submit" onclick="window.location='<?= site_url('welcome/out') ?>'">Log Out</button>
+            </div> </form>
+        </section>
+
+    </div></div>
+
+<script type="text/javascript">
+    $(function(){
+        get_dfct_advance('');
+        status_vehicle_all('');
+
+
+    });
+</script>
