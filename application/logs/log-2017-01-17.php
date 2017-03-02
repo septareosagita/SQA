@@ -1,0 +1,47 @@
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed'); ?>
+
+ERROR - 2017-01-17 09:36:53 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 09:36:55 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 09:37:58 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 09:37:59 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 09:38:17 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 09:38:18 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 09:41:41 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 09:41:41 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 09:42:58 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 09:42:59 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 09:58:32 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 09:58:33 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:02:18 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:02:19 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:02:48 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:02:49 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:03:00 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:03:01 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:03:32 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:03:32 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:03:41 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:03:43 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:04:10 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:04:10 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:22:12 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:22:12 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:22:44 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:22:45 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:31:22 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:31:23 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:31:23 --> Query error: a:1:{i:0;a:6:{i:0;s:5:"42000";s:8:"SQLSTATE";s:5:"42000";i:1;i:102;s:4:"code";i:102;i:2;s:84:"[Microsoft][SQL Server Native Client 10.0][SQL Server]Incorrect syntax near 'MODEL'.";s:7:"message";s:84:"[Microsoft][SQL Server Native Client 10.0][SQL Server]Incorrect syntax near 'MODEL'.";}}
+ERROR - 2017-01-17 11:32:41 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:32:42 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:47:11 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:47:11 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:47:37 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:47:37 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:48:16 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:48:16 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:48:37 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 11:48:38 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 16:16:17 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 16:16:17 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 16:16:29 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32
+ERROR - 2017-01-17 16:16:31 --> Severity: Notice  --> Undefined variable: data H:\xampp\htdocs\SQA\application\controllers\download_report.php 32

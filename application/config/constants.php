@@ -39,10 +39,10 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 define('PAGE_PERVIEW', 20);
 
 // @todo: simpan di M_SQA_SYSTEM
-define('PATH_IMG', 'C:/sqadfct/dfct/');
-define('PATH_IMG_URL', 'http://10.16.66.74/sqadfct/dfct/');
-define('PATH_ATTCH', 'C:/sqadfct/attach/');
-define('PATH_ATTCH_URL', 'http://10.16.66.74/sqadfct/attach/');
+define('PATH_IMG', 'H:/xampp/htdocs/sqadfct/dfct/');
+define('PATH_IMG_URL', 'http://localhost/sqadfct/dfct/');
+define('PATH_ATTCH', 'H:/xampp/htdocs/sqadfct/attach/');
+define('PATH_ATTCH_URL', 'http://localhost/sqadfct/attach/');
 
 // untuk ngemail, path aplikasi url
 define("APP_URL", "http://10.16.66.74/toyotasqa/");

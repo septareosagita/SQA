@@ -17,6 +17,7 @@
         overflow: hidden; /* Required to set */
     }
 </style>
+
 <script type="text/javascript">
     $(function() {
         $(".view_detail2").fancybox({
@@ -36,6 +37,8 @@
                                 '&ge;',
                                 '&Oslash;'
                                 ]);
+		$("#TargetDate").datepicker({nextText: '&raquo;',prevText: '&laquo;',showAnim: 'slideDown',dateFormat: 'dd-mm-yy',changeMonth: true,changeYear: true});
+		$("#ReplyDate").datepicker({nextText: '&raquo;',prevText: '&laquo;',showAnim: 'slideDown',dateFormat: 'dd-mm-yy',changeMonth: true,changeYear: true});
     });
 
     jQuery.fn.extend({
@@ -554,9 +557,35 @@
         var repair_flg = $('#repair_flg').val();
         var auditor_nm_1 = $('#auditor_nm_1').val();
         var auditor_nm_2 = $('#auditor_nm_2').val();
-
+		
+		var plantline = $('input[name="radioPlant"]:checked').val();
+		var chkpio=$("#chkpio").is(":checked"); 
+		var ProdShift=$("#ProdShift").val(); 
+		var Inspection=$("#shopId").val(); 
+		
+		var dateParts1 = $("#TargetDate").val().split("-");        
+		var dateParts2 = $("#ReplyDate").val().split("-");  
+		
+		var currentTime=new Date(dateParts1[2], (dateParts1[1])-1, dateParts1[0]);  
+		var month=currentTime.getMonth() + 1;
+		var day=currentTime.getDate();
+		var year=currentTime.getFullYear();  
+		if (day < 10) { day = '0' + day } ;
+		if (month < 10) { month = '0' + month } ;
+        var TargetDate = (year + "-" + month + "-" + day  );
+		
+		var currentTime2=new Date(dateParts2[2], (dateParts2[1])-1, dateParts2[0]);  
+		var month2=currentTime2.getMonth() + 1;
+		var day2=currentTime2.getDate();
+		var year2=currentTime2.getFullYear(); 
+		if (day2 < 10) { day2 = '0' + day2 } ;
+		if (month2 < 10) { month2 = '0' + month2 } ;
+		
+		
+		var ReplayDate=(year2+ "-" +month2 + "-" + day2  );
+		
         if (dfct != '' && ctg_nm != '') {
-            // send to controller
+            // send to controller 
             $.post('<?= site_url('t_sqa_dfct/add_dfct') ?>',
                 {
                     plant_nm: plant_nm,
@@ -581,7 +610,13 @@
                     qlty_gt_item: qlty_gt_item,
                     repair_flg: repair_flg,
                     auditor_nm_1: auditor_nm_1,
-                    auditor_nm_2: auditor_nm_2
+                    auditor_nm_2: auditor_nm_2,
+					plantline : plantline,
+					chkpio:chkpio,
+					ProdShift:ProdShift,
+					Inspection:Inspection,
+					TargetDate:TargetDate,
+					ReplayDate:ReplayDate
                 },
                 function(html) {
                     if (html == 2) {
@@ -709,10 +744,9 @@
             } else {                
                 $('#dfct_panel').show();                
                 t_dfct = 1;
-
                 // get the data from responses JSON
                 var dfct_data = JSON.parse(html);
-                var problem_id = dfct_data[0];
+                var problem_id = dfct_data[0]; 
                 var dfct = dfct_data[1];
                 var rank_nm = dfct_data[2];
                 var ctg_grp_id = dfct_data[3];
@@ -730,7 +764,15 @@
                 var approve_sysdate = dfct_data[15];
                 var auditor_nm_1 = dfct_data[16];
                 var auditor_nm_2 = dfct_data[17];
-
+ 
+				var chkpio=dfct_data[18];
+				var plantline = dfct_data[19];
+				var Inspection=dfct_data[20];
+				var ProdShift=dfct_data[21]; 
+				var datetarget = dfct_data[22];
+				var datereplay = dfct_data[23];
+				 
+				
                 // bind it to the component
                 $('#dfct').val(dfct);                
                 $('#rank_nm').val(rank_nm);
@@ -750,7 +792,19 @@
                 $('#shop_nm').val(shop_nm);                
                 $('#widget_dfct').scrollTo(300);
                 $('#lblDefect').html('- DEFECT');
-                
+                 
+				if(chkpio=="true"){  		
+					document.getElementById("chkpio").checked = true;					
+				}else{ 				
+					document.getElementById("chkpio").checked = false;
+				} 
+				$('#rdoline_' + plantline).attr('checked', 'checked');               
+				$('#ProdShift').val(ProdShift);                
+				$('#ReplyDate').val(datereplay);                
+				$('#TargetDate').val(datetarget);                
+				$('#shopId').val(Inspection);   
+				 
+				 
                 /**
                 --- pengecekan tombol 2 approval --
                 0. awalnya kondisi button sesuai dfct_button_2 dulu
@@ -1062,73 +1116,126 @@
                                 <td colspan="4"><input name="refval" type="text" id="refval" size="30" /></td>
                                 <td><input type="button" name="btnDelete" id="btnDelete" value="Delete" class="button button-gray" style="width:130px;" onclick="on_delete_dfct();" /></td>
                             </tr>
-                    <tr>
-                        <td height="29" colspan="3"><strong>Confirmation By</strong></td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td width="3%">Yes</td>
-                        <td width="8%">No</td>
-                        <td width="1%">&nbsp;</td>
-                        <td width="20%">&nbsp;</td>
-                        <td><input type="button" name="btnClear" id="btnClear" value="Clear" class="button button-gray" style="width:130px;" onclick="clear_defect(); $('#dfct').focus()" /></td
-                    ></tr>
-                    <tr>
-                        <td height="29">QCD</td>
-                        <td>:</td>
-                        <td><input name="conf_by_qcd" type="text" id="conf_by_qcd" size="30" /></td>
-                        <td>
-                            Inspection Item
-                            <input type="hidden" name="insp_item_flag" id="insp_item_flag" value="0" />
-                        </td>
-                        <td>:</td>
-                        <td><input type="radio" name="insp_item_flag_r" id="insp_item_flag_1" value="radio" onclick="$('#insp_item_flag').val(1)" /></td>
-                        <td><input type="radio" name="insp_item_flag_r" id="insp_item_flag_0" value="radio" onclick="$('#insp_item_flag').val(0)" checked="checked" /></td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td>                            
-                            <a href="<?=site_url('t_sqa_dfct/upload_img')?>" class="view_detail2">                                
-                                <input type="button" id="btnUploadImage" value="Upload Image" onclick="" class="button button-gray" style="width:130px; " />
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td height="29">Related Div</td>
-                        <td>:</td>
-                        <td><input name="conf_by_related" type="text" id="conf_by_related" size="30" /></td>
-                        <td>
-                            Quality Gate Item
-                            <input type="hidden" name="qlty_gt_item" id="qlty_gt_item" value="0" />
-                        </td>
-                        <td>:</td>
-                        <td><input type="radio" name="qlty_gt_item_r" id="qlty_gt_item_1" value="radio" onclick="$('#qlty_gt_item').val(1)" /></td>
-                        <td><input type="radio" name="qlty_gt_item_r" id="qlty_gt_item_0" value="radio" onclick="$('#qlty_gt_item').val(0)" checked="checked" /></td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td><input type="button" name="btnPreview" id="btnPreview" value="Preview" class="button button-gray" style="width:130px;" onclick="preview_dfct();" /></td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td>
-                            History Repair Process
-                            <input type="hidden" name="repair_flg" id="repair_flg" value="0" />
-                        </td>
-                        <td>:</td>
-                        <td><input type="radio" name="repair_flg_r" id="repair_flg_1" value="radio" onclick="$('#repair_flg').val(1)" /></td>
-                        <td><input type="radio" name="repair_flg_r" id="repair_flg_0" value="radio" onclick="$('#repair_flg').val(0)" checked="checked" /></td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td>
-                            <a href="<?=site_url('t_sqa_dfct/upload_attch')?>" class="view_detail">
-                                <!--button class="button button-gray" style="width:130px;" id="btnUploadAttch">Upload Attach</button-->
-                                <input type="button" id="btnUploadAttch" value="Upload Attach" onclick="" class="button button-gray" style="width:130px; " />
-                            </a>
-                        </td>
-                    </tr>
-                </table>
-            </section>
-        </div>
+							<tr>
+								<td height="29" colspan="3"><strong>Confirmation By</strong></td>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+								<td width="3%">Yes</td>
+								<td width="8%">No</td>
+								<td width="1%">&nbsp;</td>
+								<td width="20%">&nbsp;</td>
+								<td><input type="button" name="btnClear" id="btnClear" value="Clear" class="button button-gray" style="width:130px;" onclick="clear_defect(); $('#dfct').focus()" /></td>
+							</tr>
+							<tr>
+								<td height="29">QCD</td>
+								<td>:</td>
+								<td><input name="conf_by_qcd" type="text" id="conf_by_qcd" size="30" /></td>
+								<td>
+									Inspection Item
+									<input type="hidden" name="insp_item_flag" id="insp_item_flag" value="0" />
+								</td>
+								<td>:</td>
+								<td><input type="radio" name="insp_item_flag_r" id="insp_item_flag_1" value="radio" onclick="$('#insp_item_flag').val(1)" /></td>
+								<td><input type="radio" name="insp_item_flag_r" id="insp_item_flag_0" value="radio" onclick="$('#insp_item_flag').val(0)" checked="checked" /></td>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+								<td>                            
+									<a href="<?=site_url('t_sqa_dfct/upload_img')?>" class="view_detail2">                                
+										<input type="button" id="btnUploadImage" value="Upload Image" onclick="" class="button button-gray" style="width:130px; " />
+									</a>
+								</td>
+							</tr>
+							<tr>
+								<td height="29">Related Div</td>
+								<td>:</td>
+								<td><input name="conf_by_related" type="text" id="conf_by_related" size="30" /></td>
+								<td>
+									Quality Gate Item
+									<input type="hidden" name="qlty_gt_item" id="qlty_gt_item" value="0" />
+								</td>
+								<td>:</td>
+								<td><input type="radio" name="qlty_gt_item_r" id="qlty_gt_item_1" value="radio" onclick="$('#qlty_gt_item').val(1)" /></td>
+								<td><input type="radio" name="qlty_gt_item_r" id="qlty_gt_item_0" value="radio" onclick="$('#qlty_gt_item').val(0)" checked="checked" /></td>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+								<td><input type="button" name="btnPreview" id="btnPreview" value="Preview" class="button button-gray" style="width:130px;" onclick="preview_dfct();" /></td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+								<td>
+									History Repair Process
+									<input type="hidden" name="repair_flg" id="repair_flg" value="0" />
+								</td>
+								<td>:</td>
+								<td><input type="radio" name="repair_flg_r" id="repair_flg_1" value="radio" onclick="$('#repair_flg').val(1)" /></td>
+								<td><input type="radio" name="repair_flg_r" id="repair_flg_0" value="radio" onclick="$('#repair_flg').val(0)" checked="checked" /></td>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+								<td>
+									<a href="<?=site_url('t_sqa_dfct/upload_attch')?>" class="view_detail">
+										<!--button class="button button-gray" style="width:130px;" id="btnUploadAttch">Upload Attach</button-->
+										<input type="button" id="btnUploadAttch" value="Upload Attach" onclick="" class="button button-gray" style="width:130px; " />
+									</a>
+								</td>
+							</tr>
+							<tr>
+                                <td height="29">KCY</td>
+                                <td>:</td>
+                                <td width="29%">
+                                     <input  type="checkbox" id="chkpio" name="chkpio" value="PIO"/> 
+                                </td>
+                                <td width="14%">Inspection</td>
+                                <td width="1%">:</td>
+                                <td colspan="4">
+                                    <select name="shopId" id="shopId" style="width: 215px">
+                                        <option value="">--shop--</option>
+                                        <?php foreach ($list_shop as $l): if ($l->SHOP_NM != 'All'): ?>
+                                        <option value="<?= $l->SHOP_NM ?>"><?= $l->SHOP_NM ?></option>
+                                        <?php endif; endforeach; ?>
+                                    </select>
+                                </td>
+                                <td>&nbsp;</td>
+                            </tr>
+							<tr>
+                                <td height="29">Plant</td>
+                                <td>:</td>
+                                <td width="29%">  
+									 <input type="radio" id="rdoline_0" name="radioPlant" checked="checked" value="0"  /> InLine
+                                    <input type="radio" id="rdoline_1" name="radioPlant" value="1" /> OutLine
+                                </td>
+                                <td width="14%">Target reply</td>
+                                <td width="1%">:</td>
+                                <td colspan="4"> 
+									<input id="TargetDate" name="TargetDate" value="<?=get_date3()?>" type="text" maxlength="10">
+                                </td>
+                                <td>&nbsp;</td>
+                            </tr>
+							<tr>
+                                <td height="29">Prod Shift</td>
+                                <td>:</td>
+                                <td width="29%">   	
+									 
+									 <select name="ProdShift" id="ProdShift"  style="width: 215px">
+										<option value="" selected></option>
+                                        <option value="NON">NON</option>
+                                        <option value="RED">RED</option>
+										<option value="WHITE">WHITE</option>  
+                                    </select>
+									
+									
+                                </td>
+                                <td width="14%">Reply date</td>
+                                <td width="1%">:</td>
+                                <td colspan="4"> 
+									<input id="ReplyDate" name="ReplyDate" value="<?=get_date3()?>" type="text" maxlength="10">
+                                </td>
+                                <td>&nbsp;</td>
+                            </tr>
+						</table>
+					</section>
+				</div>
 
 
         <table width="100%" border="0">

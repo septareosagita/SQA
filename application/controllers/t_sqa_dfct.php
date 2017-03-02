@@ -483,6 +483,14 @@ class t_sqa_dfct extends CI_Controller {
         $auditor_nm_1 = $_POST['auditor_nm_1'];
         $auditor_nm_2 = $_POST['auditor_nm_2'];
 				
+		//ADD BY SEPTAREO SAGITA 10 JANUARI 2017 
+		$plantline = $_POST['plantline'];
+		$chkpio=$_POST['chkpio'];
+		$ProdShift=$_POST['ProdShift'];
+		$Inspection=$_POST['Inspection'];
+		$TargetDate=$_POST['TargetDate'];
+		$ReplayDate=$_POST['ReplayDate'];
+		
 		// validasi reference value
 		$refval = str_replace('♦', '&diams;', $refval);
 		$refval = str_replace('±', '&plusmn;', $refval);
@@ -532,7 +540,14 @@ class t_sqa_dfct extends CI_Controller {
                         IS_DELETED,
                         SHOP_NM,
                         updateby,
-                        updatedt)
+                        updatedt,
+						KCY,
+						PLANT,
+						INSPECTION,
+						PROD_SHIFT,
+						TARGET_DATE,
+						REPLAY_DATE
+						)
                 VALUES (
                         @MyIdentity,
                         '" . $plant_nm . "',
@@ -559,7 +574,13 @@ class t_sqa_dfct extends CI_Controller {
                         '0',
                         '" . $shop_nm . "', 
                         '" . get_user_info($this, 'USER_ID') . "',
-                        '" . get_date() . "'
+                        '" . get_date() . "',
+						'" . $chkpio . "',
+						'" . $plantline . "',
+						'" . $Inspection . "',
+						'" . $ProdShift . "',
+						'" . $TargetDate . "',
+						'" . $ReplayDate . "'
                 );
                 SELECT @MyIdentity as PROBLEM_ID;
                 ";                
@@ -652,7 +673,13 @@ class t_sqa_dfct extends CI_Controller {
                 'SQA_SYSDATE' => get_date(),
                 'SHOP_NM' => $shop_nm,
                 'Updateby' => get_user_info($this, 'USER_ID'),
-                'Updatedt' => get_date()
+                'Updatedt' => get_date(),
+				'KCY'=>$chkpio,
+				'PLANT'=>$plantline,
+				'INSPECTION'=>$Inspection,
+				'PROD_SHIFT'=>$ProdShift,
+				'TARGET_DATE'=>$TargetDate,
+				'REPLAY_DATE'=>$ReplayDate
             );
             $keys = "PROBLEM_ID = '" . $problem_id . "'";
             $this->dm->init('T_SQA_DFCT');
@@ -749,6 +776,13 @@ class t_sqa_dfct extends CI_Controller {
             $approve_sysdate = ($p->APPROVE_SYSDATE == null) ? '' : $p->APPROVE_SYSDATE;
             $auditor_nm_1 = $p->AUDITOR_NM_1;
             $auditor_nm_2 = $p->AUDITOR_NM_2;
+			$chkpio= $p->KCY;
+			$plantline= $p->PLANT;
+			$Inspection= $p->INSPECTION;
+			$ProdShift= $p->PROD_SHIFT;
+			$TargetDate= date('m-d-Y', strtotime($p->TARGET_DATE)) ;
+			$ReplayDate= date('m-d-Y', strtotime($p->REPLAY_DATE)) ;
+				
 			
 			// de-validasi reference value
 			$refval = str_replace('&diams;', '♦', $refval);
@@ -804,7 +838,14 @@ class t_sqa_dfct extends CI_Controller {
                         $audit_finish_pdate,
                         $approve_sysdate,
                         $auditor_nm_1,
-                        $auditor_nm_2);
+                        $auditor_nm_2,
+						$chkpio,
+						$plantline,
+						$Inspection,
+						$ProdShift,
+						$TargetDate,
+						$ReplayDate
+						);
             echo json_encode($out);
         } else {
             // data tdk ada, bersihkan frame
